@@ -1,0 +1,94 @@
+
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+#define MAX_NAME_LENGTH 100  
+#define MAX_ITEMS 10  
+  
+// 商品结构体  
+typedef struct {  
+    int id;  
+    char name[MAX_NAME_LENGTH];  
+    float price;  
+} Item;  
+  
+// 商品列表  
+Item items[MAX_ITEMS] = {  
+    {1, "汉堡", 10.0},  
+    {2, "薯条", 5.0},  
+    {3, "可乐", 3.0},  
+    {4, "披萨", 15.0},  
+    // 可以继续添加更多商品  
+    // ...  
+    {0, "", 0.0}  // 作为列表结束的标志，id为0表示无效商品  
+};  
+  
+// 计算总价函数  
+float calculateTotal(int selectedItems[], int count) {  
+    float total = 0.0;  
+    for (int i = 0; i < count; i++) {  
+        total += items[selectedItems[i] - 1].price;  // 数组索引从0开始，商品id从1开始  
+    }  
+    return total;  
+}  
+  
+int main() {  
+    int selectedItems[MAX_ITEMS];  // 存储用户选择的商品id  
+    int selectedCount = 0;         // 用户选择的商品数量  
+    int choice;  
+    char continueShopping;  
+  
+    while (1) {  
+        printf("\n商品列表:\n");  
+        for (int i = 0; items[i].id != 0; i++) {  // 遍历到id为0的商品为止  
+            printf("%d. %s - %.2f 元\n", items[i].id, items[i].name, items[i].price);  
+        }  
+  
+        printf("选择商品（输入0结束购物）: ");  
+        scanf("%d", &choice);  
+  
+        if (choice == 0) {  
+            break;  // 用户选择结束购物  
+        }  
+  
+        // 检查输入的商品id是否有效  
+        int isValid = 0;  
+        for (int i = 0; items[i].id != 0; i++) {  
+            if (choice == items[i].id) {  
+                isValid = 1;  
+                break;  
+            }  
+        }  
+  
+        if (!isValid) {  
+            printf("无效的商品id，请重新选择。\n");  
+            continue;  
+        }  
+  
+        // 将选择的商品添加到selectedItems数组中  
+        if (selectedCount < MAX_ITEMS) {  
+            selectedItems[selectedCount++] = choice;  
+        } else {  
+            printf("购物车已满，无法添加更多商品。\n");  
+        }  
+  
+        printf("是否继续购物？（y/n）: ");  
+        scanf(" %c", &continueShopping);  // 注意%c前的空格，用于消耗可能存在的换行符  
+  
+        if (continueShopping != 'y' && continueShopping != 'Y') {  
+            break;  // 用户选择不再继续购物  
+        }  
+    }  
+  
+    // 计算并显示总价  
+    float total = calculateTotal(selectedItems, selectedCount);  
+    printf("\n您选择的商品总价是: %.2f 元\n", total);  
+  
+    // 显示选择的商品  
+    printf("您选择的商品有:\n");  
+    for (int i = 0; i < selectedCount; i++) {  
+        printf("%d. %s\n", selectedItems[i], items[selectedItems[i] - 1].name);  
+    }  
+  
+    return 0; 

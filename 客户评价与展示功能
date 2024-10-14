@@ -1,0 +1,85 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+#define MAX_REVIEWS 100 // 假设最多存储100条评价  
+#define REVIEW_TEXT_SIZE 500 // 每条评价文本的最大长度  
+  
+// 定义客户评价结构体  
+typedef struct {  
+    int rating; // 评分，1-5分  
+    char text[REVIEW_TEXT_SIZE]; // 评价文本  
+} Review;  
+  
+// 存储评价信息的数组和当前评价数量  
+Review reviews[MAX_REVIEWS];  
+int reviewCount = 0;  
+  
+// 接收用户输入的评价  
+void getReview(Review* review) {  
+    printf("请输入评分（1-5分）: ");  
+    scanf("%d", &review->rating);  
+    while (review->rating < 1 || review->rating > 5) {  
+        printf("评分无效，请输入1-5之间的数字: ");  
+        scanf("%d", &review->rating);  
+    }  
+  
+    printf("请输入您的评价: ");  
+    fgets(review->text, REVIEW_TEXT_SIZE, stdin);  
+    // 去除换行符和可能的回车符（Windows系统）  
+    review->text[strcspn(review->text, "\r\n")] = 0;  
+}  
+  
+// 添加评价到数组  
+void addReview(Review review) {  
+    if (reviewCount < MAX_REVIEWS) {  
+        reviews[reviewCount++] = review;  
+    } else {  
+        printf("评价数量已达到上限！\n");  
+    }  
+}  
+  
+// 展示所有已存储的评价  
+void displayReviews() {  
+    if (reviewCount == 0) {  
+        printf("还没有任何评价。\n");  
+        return;  
+    }  
+    for (int i = 0; i < reviewCount; i++) {  
+        printf("评价 %d:\n", i + 1);  
+        printf("评分: %d\n", reviews[i].rating);  
+        printf("评价: %s\n", reviews[i].);text  
+        printf("----------\n");  
+    }  
+}  
+  
+int main() {  
+    Review review;  
+    int choice;  
+  
+    do {  
+        printf("\n外卖软件客户评价系统\n");  
+        printf("1. 添加评价\n");  
+        printf("2. 展示所有评价\n");  
+        printf("3. 退出\n");  
+        printf("请选择操作: ");  
+        scanf("%d", &choice);  
+  
+        switch (choice) {  
+            case 1:  
+                getReview(&review);  
+                addReview(review);  
+                break;  
+            case 2:  
+                displayReviews();  
+                break;  
+            case 3:  
+                printf("退出系统。\n");  
+                break;  
+            default:  
+                printf("无效的选择，请重新选择。\n");  
+        }  
+    } while (choice != 3);  
+  
+    return 0;  
+}

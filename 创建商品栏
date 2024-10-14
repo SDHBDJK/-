@@ -1,0 +1,76 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+#define MAX_NAME_LENGTH 100  
+#define MAX_ITEMS 100  
+  
+// 商品结构体  
+typedef struct {  
+    char name[MAX_NAME_LENGTH];  
+    float price;  
+} Item;  
+  
+// 商品列表  
+Item items[MAX_ITEMS];  
+int item_count = 0;  
+  
+// 添加商品函数  
+void addItem(const char* name, float price) {  
+    if (item_count >= MAX_ITEMS) {  
+        printf("商品列表已满，无法添加更多商品。\n");  
+        return;  
+    }  
+      
+    strncpy(items[item_count].name, name, MAX_NAME_LENGTH - 1);  
+    items[item_count].name[MAX_NAME_LENGTH - 1] = '\0';  // 确保字符串以空字符结尾  
+    items[item_count].price = price;  
+    item_count++;  
+    printf("商品 %s 已成功添加，价格为 %.2f 元。\n", name, price);  
+}  
+  
+// 显示所有商品函数  
+void displayItems() {  
+    if (item_count == 0) {  
+        printf("没有商品。\n");  
+        return;  
+    }  
+      
+    printf("商品列表:\n");  
+    for (int i = 0; i < item_count; i++) {  
+        printf("%d. %s - %.2f 元\n", i + 1, items[i].name, items[i].price);  
+    }  
+}  
+  
+int main() {  
+    int choice;  
+    char name[MAX_NAME_LENGTH];  
+    float price;  
+  
+    while (1) {  
+        printf("\n1. 添加商品\n");  
+        printf("2. 显示所有商品\n");  
+        printf("3. 退出\n");  
+        printf("选择操作: ");  
+        scanf("%d", &choice);  
+  
+        switch (choice) {  
+            case 1:  
+                printf("输入商品名称: ");  
+                scanf("%s", name);  
+                printf("输入商品价格: ");  
+                scanf("%f", &price);  
+                addItem(name, price);  
+                break;  
+            case 2:  
+                displayItems();  
+                break;  
+            case 3:  
+                printf("退出程序。\n");  
+                exit(0);  
+            default:  
+                printf("无效选择，请重新选择。\n");  
+        }  
+    }  
+  
+    return 0; 

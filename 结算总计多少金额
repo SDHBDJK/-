@@ -1,0 +1,65 @@
+#include <stdio.h>  
+  
+// 商品结构体  
+typedef struct {  
+    int id;  
+    char name[50];  
+    float price;  
+} Item;  
+  
+// 假设有一个函数来获取用户选择的商品和数量（这里用硬编码的数据代替）  
+void getUserSelectedItems(Item items[], int itemCount, int selectedIds[], int selectedQuantities[], int *selectedCount) {  
+    // 硬编码的用户选择，实际中应该通过用户输入或其他方式获取  
+    *selectedCount = 3; // 假设用户选择了3个商品  
+    selectedIds[0] = 1;  
+    selectedQuantities[0] = 2; // 用户选择了2个商品1（假设是汉堡）  
+    selectedIds[1] = 2;  
+    selectedQuantities[1] = 1; // 用户选择了1个商品2（假设是薯条）  
+    selectedIds[2] = 3;  
+    selectedQuantities[2] = 3; // 用户选择了3个商品3（假设是可乐）  
+}  
+  
+// 计算总价函数  
+float calculateTotal(Item items[], int itemCount, int selectedIds[], int selectedQuantities[], int selectedCount) {  
+    float total = 0.0;  
+    for (int i = 0; i < selectedCount; i++) {  
+        int id = selectedIds[i];  
+        int quantity = selectedQuantities[i];  
+        // 查找商品并计算总价  
+        for (int j = 0; j < itemCount; j++) {  
+            if (items[j].id == id) {  
+                total += items[j].price * quantity;  
+                break; // 找到匹配的商品后退出内层循环  
+            }  
+        }  
+    }  
+    return total;  
+}  
+  
+int main() {  
+    // 商品列表  
+    Item items[] = {  
+        {1, "汉堡", 10.0},  
+        {2, "薯条", 5.0},  
+        {3, "可乐", 3.0},  
+        // 可以继续添加更多商品  
+        {0, "", 0.0} // 作为列表结束的标志，id为0表示无效商品  
+    };  
+    int itemCount = sizeof(items) / sizeof(items[0]) - 1; // 排除无效商品  
+  
+    // 用户选择的商品id和数量  
+    int selectedIds[10]; // 假设最多选择10个商品  
+    int selectedQuantities[10];  
+    int selectedCount = 0;  
+  
+    // 获取用户选择的商品和数量（这里用硬编码的数据代替实际获取过程）  
+    getUserSelectedItems(items, itemCount, selectedIds, selectedQuantities, &selectedCount);  
+  
+    // 计算总价  
+    float total = calculateTotal(items, itemCount, selectedIds, selectedQuantities, selectedCount);  
+  
+    // 显示总价  
+    printf("结算金额: %.2f 元\n", total);  
+  
+    return 0;  
+}

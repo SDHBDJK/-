@@ -1,0 +1,69 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+// 定义订单结构体  
+typedef struct {  
+    int orderID;  
+    char customerName[50];  
+    char address[100];  
+    float totalAmount;  
+    int isDelivered; // 0: 未配送, 1: 已配送  
+} Order;  
+  
+// 定义配送员结构体  
+typedef struct {  
+    int deliveryPersonID;  
+    char name[50];  
+    int isAvailable; // 0: 不可用, 1: 可用  
+} DeliveryPerson;  
+  
+// 创建订单  
+Order createOrder(int orderID, const char* customerName, const char* address, float totalAmount) {  
+    Order order;  
+    order.orderID = orderID;  
+    strncpy(order.customerName, customerName, sizeof(order.customerName) - 1);  
+    strncpy(order.address, address, sizeof(order.address) - 1);  
+    order.totalAmount = totalAmount;  
+    order.isDelivered = 0; // 初始状态为未配送  
+    return order;  
+}  
+  
+// 创建配送员  
+DeliveryPerson createDeliveryPerson(int deliveryPersonID, const char* name) {  
+    DeliveryPerson dp;  
+    dp.deliveryPersonID = deliveryPersonID;  
+    strncpy(dp.name, name, sizeof(dp.name) - 1);  
+    dp.isAvailable = 1; // 初始状态为可用  
+    return dp;  
+}  
+  
+// 分配配送员给订单  
+void assignDeliveryPerson(Order* order, DeliveryPerson* dp) {  
+    if (dp->isAvailable) {  
+        dp->isAvailable = 0; // 设置为不可用  
+        order->isDelivered = 1; // 设置为已配送（这里只是模拟，实际中需要更多逻辑）  
+        printf("Order %d assigned to delivery person %s\n", order->orderID, dp->name);  
+    } else {  
+        printf("Delivery person %s is not available\n", dp->name);  
+    }  
+}  
+  
+int main() {  
+    // 创建订单  
+    Order order1 = createOrder(1, "Alice", "123 Main St", 25.50);  
+    Order order2 = createOrder(2, "Bob", "456 Elm St", 30.00);  
+  
+    // 创建配送员  
+    DeliveryPerson dp1 = createDeliveryPerson(1, "John Doe");  
+    DeliveryPerson dp2 = createDeliveryPerson(2, "Jane Smith");  
+  
+    // 分配配送员给订单  
+    assignDeliveryPerson(&order1, &dp1);  
+    assignDeliveryPerson(&order2, &dp2);  
+  
+    // 尝试分配给一个已占用的配送员  
+    assignDeliveryPerson(&order2, &dp1);  
+  
+    return 0;  
+}

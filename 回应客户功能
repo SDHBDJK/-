@@ -1,0 +1,48 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+#define MAX_MESSAGE_SIZE 500 // 假设客户消息的最大长度为500字符  
+#define RESPONSE_SIZE 500    // 回应消息的最大长度  
+  
+// 模拟接收客户消息的函数（在实际应用中，这将通过网络通信实现）  
+void receiveMessage(char *message) {  
+    // 在这里，我们简单地使用fgets从标准输入读取消息  
+    printf("请输入您的消息: ");  
+    fgets(message, MAX_MESSAGE_SIZE, stdin);  
+    // 去除换行符和可能的回车符（Windows系统）  
+    message[strcspn(message, "\r\n")] = 0;  
+}  
+  
+// 生成回应的函数  
+void generateResponse(const char *message, char *response) {  
+    // 这里我们实现一个简单的回应逻辑  
+    // 例如，如果客户说“你好”，我们就回应“您好！有什么可以帮助您的吗？”  
+    if (strncmp(message, "你好", 2) == 0) {  
+        snprintf(response, RESPONSE_SIZE, "您好！有什么可以帮助您的吗？");  
+    } else {  
+        snprintf(response, RESPONSE_SIZE, "感谢您的消息！我们会尽快处理。");  
+    }  
+}  
+  
+// 模拟发送回应给客户的函数（在实际应用中，这将通过网络通信实现）  
+void sendResponse(const char *response) {  
+    // 在这里，我们简单地使用printf将回应打印到标准输出  
+    printf("回应: %s\n", response);  
+}  
+  
+int main() {  
+    char message[MAX_MESSAGE_SIZE];  
+    char response[RESPONSE_SIZE];  
+  
+    // 接收客户的消息  
+    receiveMessage(message);  
+  
+    // 生成回应  
+    generateResponse(message, response);  
+  
+    // 发送回应给客户  
+    sendResponse(response);  
+  
+    return 0;  
+}

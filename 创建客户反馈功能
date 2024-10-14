@@ -1,0 +1,60 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h>  
+  
+// 定义客户反馈结构体  
+typedef struct {  
+    char customerName[100];  
+    char feedback[500];  
+    char timestamp[50]; // 可以是时间戳，用于记录反馈时间  
+} Feedback;  
+  
+// 获取当前时间戳（简化版，实际应用中可能需要更精确的时间格式）  
+void getCurrentTimestamp(char* timestamp, int size) {  
+    time_t t = time(NULL);  
+    struct tm tm = *localtime(&t);  
+    strftime(timestamp, size, "%Y-%m-%d %H:%M:%S", &tm);  
+}  
+  
+// 接收用户输入的反馈  
+void getFeedback(Feedback* fb) {  
+    printf("请输入您的姓名: ");  
+    fgets(fb->customerName, sizeof(fb->customerName), stdin);  
+    // 去除换行符  
+    fb->customerName[strcspn(fb->customerName, "\n")] = 0;  
+  
+    printf("请输入您的反馈: ");  
+    fgets(fb->feedback, sizeof(fb->feedback), stdin);  
+    // 去除换行符和可能的回车符（Windows系统）  
+    fb->feedback[strcspn(fb->feedback, "\r\n")] = 0;  
+  
+    getCurrentTimestamp(fb->timestamp, sizeof(fb->timestamp));  
+}  
+  
+// 将反馈信息保存到文件  
+void saveFeedbackToFile(const Feedback* fb, const char* filename) {  
+    FILE* file = fopen(filename, "a"); // 以追加模式打开文件  
+    if (file == NULL) {  
+        perror("无法打开文件");  
+        exit(EXIT_FAILURE);  
+    }  
+    fprintf(file, "姓名: %s\n", fb->customerName);  
+    fprintf(file, "反馈: %s\n", fb->feedback);  
+    fprintf(file, "时间: %s\n", fb->timestamp);  
+    fprintf(file, "---\n"); // 用作分隔符  
+    fclose(file);  
+}  
+  
+int main() {  
+    Feedback fb;  
+  
+    // 获取用户反馈  
+    getFeedback(&fb);  
+  
+    // 将反馈保存到文件（例如 "feedback.txt"）  
+    saveFeedbackToFile(&fb, "feedback.txt");  
+  
+    printf("感谢您的反馈！\n");  
+  
+    return 0;  
+}

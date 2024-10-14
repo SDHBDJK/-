@@ -1,0 +1,62 @@
+#include <stdio.h>  
+#include <stdbool.h>  
+#include <string.h>  
+  
+// 定义客户结构体  
+typedef struct {  
+    int customerID;  
+    char name[50];  
+    char phoneNumber[20];  
+    char email[50];  
+    char address[100];  
+} Customer;  
+  
+// 输入客户信息  
+void inputCustomerInfo(Customer* customer) {  
+    printf("Enter Customer ID: ");  
+    scanf("%d", &customer->customerID);  
+    printf("Enter Customer Name: ");  
+    scanf("%s", customer->name);  
+    printf("Enter Phone Number: ");  
+    scanf("%s", customer->phoneNumber);  
+    printf("Enter Email: ");  
+    scanf("%s", customer->email);  
+    printf("Enter Address: ");  
+    scanf("%[^\n]%*c", customer->address); // 使用 %[^\n]%*c 来读取包含空格的地址  
+}  
+  
+// 验证客户信息是否完整  
+bool validateCustomerInfo(const Customer* customer) {  
+    // 简单的验证逻辑：检查名称、电话号码和地址是否为空  
+    if (strlen(customer->name) == 0 || strlen(customer->phoneNumber) == 0 || strlen(customer->address) == 0) {  
+        return false;  
+    }  
+    return true;  
+}  
+  
+// 显示确认客户信息  
+void confirmCustomerInfo(const Customer* customer) {  
+    printf("\nCustomer Information Confirmed:\n");  
+    printf("Customer ID: %d\n", customer->customerID);  
+    printf("Name: %s\n", customer->name);  
+    printf("Phone Number: %s\n", customer->phoneNumber);  
+    printf("Email: %s\n", customer->email);  
+    printf("Address: %s\n", customer->address);  
+}  
+  
+int main() {  
+    Customer customer;  
+  
+    // 输入客户信息  
+    inputCustomerInfo(&customer);  
+  
+    // 验证客户信息  
+    if (validateCustomerInfo(&customer)) {  
+        // 显示确认信息  
+        confirmCustomerInfo(&customer);  
+    } else {  
+        printf("Error: Incomplete customer information.\n");  
+    }  
+  
+    return 0;  
+}

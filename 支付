@@ -1,0 +1,72 @@
+#include <stdio.h>  
+#include <stdbool.h>  
+  
+// 支付方式枚举  
+typedef enum {  
+    CASH,  
+    CREDIT_CARD,  
+    THIRD_PARTY // 例如支付宝、微信支付等  
+} PaymentMethod;  
+  
+// 模拟支付函数  
+bool simulatePayment(PaymentMethod method) {  
+    // 在这里，我们不会真正处理支付，只是模拟支付结果  
+    // 假设现金支付总是成功，信用卡支付有5%的失败率，第三方支付有1%的失败率  
+    bool success = true;  
+    if (method == CREDIT_CARD) {  
+        // 模拟信用卡支付失败率  
+        if (rand() % 20 < 1) { // 5%的失败率  
+            success = false;  
+        }  
+    } else if (method == THIRD_PARTY) {  
+        // 模拟第三方支付失败率  
+        if (rand() % 100 < 1) { // 1%的失败率  
+            success = false;  
+        }  
+    }  
+    // 现金支付总是成功，所以不需要额外判断  
+    return success;  
+}  
+  
+int main() {  
+    PaymentMethod paymentMethod;  
+    float orderTotal = 100.50; // 假设订单总价为100.50元  
+  
+    // 显示支付方式选项  
+    printf("请选择支付方式:\n");  
+    printf("1. 现金支付\n");  
+    printf("2. 信用卡支付\n");  
+    printf("3. 第三方支付\n");  
+  
+    // 获取用户选择的支付方式  
+    int choice;  
+    printf("请输入您的选择(1/2/3): ");  
+    scanf("%d", &choice);  
+  
+    switch (choice) {  
+        case 1:  
+            paymentMethod = CASH;  
+            break;  
+        case 2:  
+            paymentMethod = CREDIT_CARD;  
+            break;  
+        case 3:  
+            paymentMethod = THIRD_PARTY;  
+            break;  
+        default:  
+            printf("无效的选择，请重试。\n");  
+            return 1; // 退出程序  
+    }  
+  
+    // 模拟支付过程  
+    bool paymentSuccess = simulatePayment(paymentMethod);  
+  
+    // 显示支付结果  
+    if (paymentSuccess) {  
+        printf("支付成功！订单总价：%.2f元\n", orderTotal);  
+    } else {  
+        printf("支付失败，请重试。\n");  
+    }  
+  
+    return 0;  
+}

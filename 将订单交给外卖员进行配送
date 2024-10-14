@@ -1,0 +1,78 @@
+#include <stdio.h>  
+#include <string.h>  
+#include <stdlib.h>  
+#include <time.h>  
+  
+// 定义订单结构体  
+typedef struct {  
+    int orderID;  
+    char customerName[50];  
+    char merchantName[50];  
+    char itemList[200];  
+    float totalAmount;  
+    int deliveryStatus; // 0: 未分配, 1: 已分配, 2: 配送中, 3: 已送达  
+    char deliveryPersonName[50]; // 配送员姓名  
+} Order;  
+  
+// 定义外卖员结构体  
+typedef struct {  
+    int id;  
+    char name[50];  
+    // 其他外卖员信息，如当前位置、可配送区域等  
+} DeliveryPerson;  
+  
+// 模拟外卖员列表（实际应用中可能是从数据库中检索的）  
+DeliveryPerson deliveryPersons[] = {  
+    {1, "Alice"},  
+    {2, "Bob"},  
+    {3, "Charlie"}  
+    // ... 其他外卖员  
+};  
+int deliveryPersonCount = sizeof(deliveryPersons) / sizeof(deliveryPersons[0]);  
+  
+// 随机分配一个外卖员给订单（实际应用中可能有更复杂的分配逻辑）  
+DeliveryPerson* assignDeliveryPerson(Order* order) {  
+    int randomIndex = rand() % deliveryPersonCount;  
+    strcpy(order->deliveryPersonName, deliveryPersons[randomIndex].name);  
+    order->deliveryStatus = 1; // 设置为已分配  
+    return &deliveryPersons[randomIndex];  
+}  
+  
+// 模拟配送过程（实际应用中可能是通过GPS跟踪、实时消息等实现的）  
+void simulateDeliveryProcess(Order* order) {  
+    if (order->deliveryStatus == 1) { // 检查订单是否已分配  
+        order->deliveryStatus = 2; // 设置为配送中  
+        printf("Order %d is being delivered by %s...\n", order->orderID, order->deliveryPersonName);  
+          
+        // 模拟配送时间（使用sleep函数，实际应用中不应阻塞主线程）  
+        sleep(2); // 假设配送需要2秒（实际应用中可能是几分钟到几小时）  
+          
+        order->deliveryStatus = 3; // 设置为已送达  
+        printf("Order %d has been delivered by %s.\n", order->orderID, order->deliveryPersonName);  
+    } else {  
+        printf("Order %d has not been assigned to a delivery person yet.\n", order->orderID);  
+    }  
+}  
+  
+int main() {  
+    // 初始化随机数生成器  
+    srand(time(NULL));  
+      
+    // 创建一个订单示例  
+    Order order;  
+    order.orderID = 12345;  
+    strcpy(order.customerName, "John Doe");  
+    strcpy(order.merchantName, "Pizza Hut");  
+    strcpy(order.itemList, "1x Large Pizza, 2x Soda");  
+    order.totalAmount = 29.99;  
+    order.deliveryStatus = 0; // 初始状态为未分配  
+      
+    // 分配外卖员给订单  
+    DeliveryPerson* assignedPerson = assignDeliveryPerson(&order);  
+    printf("Order %d has been assigned to %s.\n", order.orderID, assignedPerson->name);  
+      
+    // 模拟配送过程  
+    simulateDeliveryProcess(&order);  
+      
+    return 0;  
+}

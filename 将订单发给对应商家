@@ -1,0 +1,63 @@
+#include <stdio.h>  
+#include <string.h>  
+  
+// 定义订单结构体  
+typedef struct {  
+    int orderID;  
+    char customerName[50];  
+    char merchantName[50]; // 这里直接存储了商家名称，实际应用中可能是商家ID  
+    char itemList[200]; // 商品列表，简化为一个字符串  
+    float totalAmount; // 总金额  
+} Order;  
+  
+// 模拟商家结构体（实际应用中可能是从数据库中检索的）  
+typedef struct {  
+    char name[50];  
+    // 其他商家信息，如联系方式、地址等  
+} Merchant;  
+  
+// 模拟商家列表  
+Merchant merchants[] = {  
+    {"Pizza Hut"},  
+    {"KFC"},  
+    {"McDonald's"}  
+    // ... 其他商家  
+};  
+int merchantCount = sizeof(merchants) / sizeof(merchants[0]);  
+  
+// 查找商家（根据商家名称）  
+Merchant* findMerchantByName(const char* name) {  
+    for (int i = 0; i < merchantCount; i++) {  
+        if (strcmp(merchants[i].name, name) == 0) {  
+            return &merchants[i];  
+        }  
+    }  
+    return NULL; // 未找到商家  
+}  
+  
+// 模拟发送订单给商家（实际应用中可能是通过API调用或消息队列）  
+void sendOrderToMerchant(const Order* order) {  
+    Merchant* merchant = findMerchantByName(order->merchantName);  
+    if (merchant) {  
+        printf("Sending order %d to %s...\n", order->orderID, merchant->name);  
+        // 这里可以添加实际的发送逻辑，比如通过网络发送订单数据  
+        // 例如：sendHTTPRequestToMerchant(order, merchant->contactInfo);  
+    } else {  
+        printf("Error: Merchant not found for order %d.\n", order->orderID);  
+    }  
+}  
+  
+int main() {  
+    // 创建一个订单示例  
+    Order order;  
+    order.orderID = 12345;  
+    strcpy(order.customerName, "John Doe");  
+    strcpy(order.merchantName, "Pizza Hut"); // 假设订单指定了商家  
+    strcpy(order.itemList, "1x Large Pizza, 2x Soda");  
+    order.totalAmount = 29.99;  
+  
+    // 发送订单给商家  
+    sendOrderToMerchant(&order);  
+  
+    return 0;  
+}

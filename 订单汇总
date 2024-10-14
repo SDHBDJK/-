@@ -1,0 +1,42 @@
+#include <stdio.h>  
+  
+// 商品结构体  
+typedef struct {  
+    char name[50];  
+    float price;  
+    int quantity;  
+} OrderItem;  
+  
+// 订单汇总函数  
+void summarizeOrder(OrderItem items[], int itemCount) {  
+    float total = 0.0;  
+  
+    printf("订单汇总:\n");  
+    for (int i = 0; i < itemCount; i++) {  
+        float itemTotal = items[i].price * items[i].quantity;  
+        total += itemTotal;  
+        printf("商品: %s, 单价: %.2f 元, 数量: %d, 小计: %.2f 元\n",  
+               items[i].name, items[i].price, items[i].quantity, itemTotal);  
+    }  
+  
+    printf("-------------------\n");  
+    printf("订单总价: %.2f 元\n", total);  
+}  
+  
+int main() {  
+    // 假设用户已经选择了以下商品和数量  
+    OrderItem order[] = {  
+        {"汉堡", 10.0, 2},  
+        {"薯条", 5.0, 1},  
+        {"可乐", 3.0, 3},  
+        // 可以继续添加更多商品  
+        {"", 0.0, 0} // 作为列表结束的标志，name为空字符串表示无效商品  
+    };  
+    int itemCount = sizeof(order) / sizeof(order[0]) - 1; // 排除无效商品  
+  
+    // 汇总订单  
+    summarizeOrder(order, itemCount);  
+  
+    return 0;  
+}
+代码说明：
